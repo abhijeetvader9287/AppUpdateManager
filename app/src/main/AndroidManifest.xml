@@ -37,7 +37,8 @@
             </intent-filter>
         </receiver>
 
-
+        <activity android:name=".UninstalledList">
+        </activity>
     </application>
 
 </manifest>
