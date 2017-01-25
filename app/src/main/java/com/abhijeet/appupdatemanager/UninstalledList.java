@@ -10,12 +10,16 @@ import android.widget.Toast;
 import com.abhijeet.appupdatemanager.DbWork.ObjectApp;
 import com.abhijeet.appupdatemanager.DbWork.TableControllerUninstalledApps;
 
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
+
 import java.util.List;
 public class UninstalledList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_uninstalled_list);
+        checkForUpdates();
         final String AppName;
         final String Version;
         if (savedInstanceState == null) {
@@ -91,5 +95,35 @@ public class UninstalledList extends AppCompatActivity {
                 linearLayoutRecords.addView(locationItem);
             }
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        // ... your own onResume implementation
+        checkForCrashes();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterManagers();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterManagers();
+    }
+    private void checkForCrashes() {
+        CrashManager.register(this);
+    }
+
+    private void checkForUpdates() {
+        // Remove this for store builds!
+        UpdateManager.register(this);
+    }
+
+    private void unregisterManagers() {
+        UpdateManager.unregister();
     }
 }

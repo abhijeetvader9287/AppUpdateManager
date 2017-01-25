@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [HOCKEYAPP_APP_ID: "e89e250fa32e4f228ac72ecb4855406d"]
     }
     buildTypes {
         release {
@@ -27,4 +28,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.0.0'
     testCompile 'junit:junit:4.12'
     compile 'cn.pedant.sweetalert:library:1.3'
+    compile 'net.hockeyapp.android:HockeySDK:4.1.2'
 }
