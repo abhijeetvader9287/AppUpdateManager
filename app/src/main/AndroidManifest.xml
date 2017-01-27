@@ -37,7 +37,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".UninstalledList">
+        <activity android:name=".InstalledList">
         </activity>
         <meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="e89e250fa32e4f228ac72ecb4855406d" />
 

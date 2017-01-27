@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * Created by Admin on 1/25/2017.
  */
-public class TableControllerUninstalledApps extends DatabaseHandler {
-    public TableControllerUninstalledApps(Context context) {
+public class TableControllerInstalledApps extends DatabaseHandler {
+    public TableControllerInstalledApps(Context context) {
         super(context);
     }
     public boolean create(ObjectApp objectapp) {
@@ -18,13 +18,13 @@ public class TableControllerUninstalledApps extends DatabaseHandler {
         values.put("AppName", objectapp.AppName);
         values.put("Version", objectapp.Version);
         SQLiteDatabase db = this.getWritableDatabase();
-        boolean createSuccessful = db.insert("uninstalledapps", null, values) > 0;
+        boolean createSuccessful = db.insert("installedapps", null, values) > 0;
         db.close();
         return createSuccessful;
     }
     public List<ObjectApp> read() {
         List<ObjectApp> recordsList = new ArrayList<ObjectApp>();
-        String sql = "SELECT * FROM uninstalledapps ORDER BY id DESC";
+        String sql = "SELECT * FROM installedapps ORDER BY id DESC";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
         if (cursor.moveToFirst()) {
@@ -45,7 +45,7 @@ public class TableControllerUninstalledApps extends DatabaseHandler {
     }
     public ObjectApp readSingleRecord(int studentId) {
         ObjectApp objectapp = null;
-        String sql = "SELECT * FROM uninstalledapps WHERE id = " + studentId;
+        String sql = "SELECT * FROM installedapps WHERE id = " + studentId;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
         if (cursor.moveToFirst()) {
@@ -63,7 +63,7 @@ public class TableControllerUninstalledApps extends DatabaseHandler {
     }
     public int count() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String sql = "SELECT * FROM uninstalledapps";
+        String sql = "SELECT * FROM installedapps";
         int recordCount = db.rawQuery(sql, null).getCount();
         db.close();
         return recordCount;
@@ -75,14 +75,14 @@ public class TableControllerUninstalledApps extends DatabaseHandler {
         String where = "id = ?";
         String[] whereArgs = {Integer.toString(objectapp.id)};
         SQLiteDatabase db = this.getWritableDatabase();
-        boolean updateSuccessful = db.update("uninstalledapps", values, where, whereArgs) > 0;
+        boolean updateSuccessful = db.update("installedapps", values, where, whereArgs) > 0;
         db.close();
         return updateSuccessful;
     }
     public boolean delete(int id) {
         boolean deleteSuccessfull = false;
         SQLiteDatabase db = this.getWritableDatabase();
-        deleteSuccessfull = db.delete("uninstalledapps", "id = " + id, null) > 0;
+        deleteSuccessfull = db.delete("installedapps", "id = " + id, null) > 0;
         db.close();
         return deleteSuccessfull;
     }

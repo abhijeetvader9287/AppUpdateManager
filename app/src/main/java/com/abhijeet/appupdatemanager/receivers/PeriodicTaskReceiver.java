@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-import com.abhijeet.appupdatemanager.UninstalledList;
+import com.abhijeet.appupdatemanager.InstalledList;
 /**
  * Created by Admin on 1/2/2017.
  */
@@ -23,7 +23,7 @@ public class PeriodicTaskReceiver extends BroadcastReceiver {
                 //  Toast.makeText(context.getApplicationContext(), "App uninstalled " + intent.getData().toString(), Toast.LENGTH_LONG).show();
             }
             if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
-                Intent i = new Intent(context.getApplicationContext(), UninstalledList.class);
+                Intent i = new Intent(context.getApplicationContext(), InstalledList.class);
                 String pname = intent.getData().toString().replace("package:", "");
                 PackageInfo pInfo = null;
                 String version = "";
@@ -49,7 +49,7 @@ public class PeriodicTaskReceiver extends BroadcastReceiver {
                 // Toast.makeText(context.getApplicationContext(), "App installed " + intent.getData().toString(), Toast.LENGTH_LONG).show();
             }
             if (intent.getAction().equals(Intent.ACTION_PACKAGE_REPLACED)) {
-                Intent i = new Intent(context.getApplicationContext(), UninstalledList.class);
+                Intent i = new Intent(context.getApplicationContext(), InstalledList.class);
                 String pname = intent.getData().toString().replace("package:", "");
                 PackageInfo pInfo = null;
                 String version = "";

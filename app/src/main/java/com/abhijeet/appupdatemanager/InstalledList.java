@@ -1,8 +1,6 @@
 package com.abhijeet.appupdatemanager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
@@ -10,17 +8,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abhijeet.appupdatemanager.DbWork.ObjectApp;
-import com.abhijeet.appupdatemanager.DbWork.TableControllerUninstalledApps;
+import com.abhijeet.appupdatemanager.DbWork.TableControllerInstalledApps;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
 import java.util.List;
-public class UninstalledList extends AppCompatActivity {
+public class InstalledList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_uninstalled_list);
+        setContentView(R.layout.activity_installed_list);
         checkForUpdates();
         final String AppName;
         final String Version;
@@ -46,7 +44,7 @@ public class UninstalledList extends AppCompatActivity {
                 .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        UninstalledList.this.finish();
+                        InstalledList.this.finish();
                     }
                 })
                 .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
@@ -55,11 +53,11 @@ public class UninstalledList extends AppCompatActivity {
                         ObjectApp objectApp = new ObjectApp();
                         objectApp.AppName = AppName;
                         objectApp.Version = Version;
-                        boolean createSuccessful = new TableControllerUninstalledApps(UninstalledList.this).create(objectApp);
+                        boolean createSuccessful = new TableControllerInstalledApps(InstalledList.this).create(objectApp);
                         if (createSuccessful) {
-                            Toast.makeText(UninstalledList.this, "App information was saved.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(InstalledList.this, "App information was saved.", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(UninstalledList.this, "Unable to save App information.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(InstalledList.this, "Unable to save App information.", Toast.LENGTH_SHORT).show();
                         }
                         readRecords();
                     }
@@ -74,9 +72,9 @@ public class UninstalledList extends AppCompatActivity {
         if (linearLayoutRecords != null) {
             linearLayoutRecords.removeAllViews();
         }
-        List<ObjectApp> uninstalledapp = new TableControllerUninstalledApps(this).read();
-        if (uninstalledapp.size() > 0) {
-            for (ObjectApp obj : uninstalledapp) {
+        List<ObjectApp> installedapp = new TableControllerInstalledApps(this).read();
+        if (installedapp.size() > 0) {
+            for (ObjectApp obj : installedapp) {
                 int id = obj.id;
                 String AppName = obj.AppName;
                 String Version = obj.Version;

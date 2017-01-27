@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String sql = "CREATE TABLE uninstalledapps " +
+        String sql = "CREATE TABLE installedapps " +
                 "( id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "AppName TEXT, " +
                 "Version TEXT ) ";
@@ -28,7 +28,7 @@ import android.database.sqlite.SQLiteOpenHelper;
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        String sql = "DROP TABLE IF EXISTS uninstalledapps";
+        String sql = "DROP TABLE IF EXISTS installedapps";
         db.execSQL(sql);
 
         onCreate(db);

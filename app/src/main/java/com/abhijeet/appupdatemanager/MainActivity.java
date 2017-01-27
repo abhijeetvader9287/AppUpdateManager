@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         btnUninstalledApp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, UninstalledList.class);
+                Intent i = new Intent(MainActivity.this, InstalledList.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
             }
