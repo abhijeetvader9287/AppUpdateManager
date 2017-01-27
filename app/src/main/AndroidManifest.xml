@@ -37,10 +37,15 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".InstalledList">
+        <activity android:name=".UpdateReqList">
         </activity>
-        <meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="e89e250fa32e4f228ac72ecb4855406d" />
 
+        <meta-data
+            android:name="net.hockeyapp.android.appIdentifier"
+            android:value="e89e250fa32e4f228ac72ecb4855406d"/>
+
+        <activity android:name=".AddFromInstalledList">
+        </activity>
     </application>
 
 </manifest>

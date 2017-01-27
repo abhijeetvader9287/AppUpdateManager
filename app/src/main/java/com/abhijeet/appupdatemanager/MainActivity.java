@@ -8,17 +8,17 @@ import android.widget.Button;
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 public class MainActivity extends AppCompatActivity {
-    Button btnUninstalledApp;
+    Button btnUpdateReqApps;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkForUpdates();
-        btnUninstalledApp = (Button) findViewById(R.id.btnUninstalledApp);
-        btnUninstalledApp.setOnClickListener(new View.OnClickListener() {
+        btnUpdateReqApps = (Button) findViewById(R.id.btnUpdateReqApps);
+        btnUpdateReqApps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, InstalledList.class);
+                Intent i = new Intent(MainActivity.this, UpdateReqList.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
             }

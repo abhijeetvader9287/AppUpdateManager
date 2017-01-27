@@ -18,7 +18,7 @@ public class UpdateReqList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_installed_list);
+        setContentView(R.layout.activity_updatereq_list);
         checkForUpdates();
         final String AppName;
         final String Version;
