@@ -1,0 +1,23 @@
+             Intent i = new Intent(context.getApplicationContext(), UninstalledList.class);
+                String pname = intent.getData().toString().replace("package:", "");
+                PackageInfo pInfo = null;
+                String version = "";
+                try {
+                    pInfo = context.getPackageManager().getPackageInfo(pname, 0);
+                    version =Integer.toString( pInfo.versionCode);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                i.putExtra("AppName", pname);
+                i.putExtra("Version", version);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+/***********************************************************************/
+http://stackoverflow.com/questions/4598769/list-of-user-installed-apps
+/***************************************************************************/
+http://stackoverflow.com/questions/8784505/how-do-i-check-if-an-app-is-a-non-system-app-in-android
+/******************************************************************************/
+http://stackoverflow.com/questions/38366063/android-issue-in-getting-a-list-of-all-installed-apps-including-system-apps
+/*********************************************/
+http://theopentutorials.com/tutorials/android/listview/how-to-get-list-of-installed-apps-in-android/
+/*******************************************************/
