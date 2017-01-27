@@ -14,7 +14,7 @@ import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
 import java.util.List;
-public class InstalledList extends AppCompatActivity {
+public class UpdateReqList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +44,7 @@ public class InstalledList extends AppCompatActivity {
                 .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        InstalledList.this.finish();
+                        UpdateReqList.this.finish();
                     }
                 })
                 .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
@@ -53,11 +53,11 @@ public class InstalledList extends AppCompatActivity {
                         ObjectApp objectApp = new ObjectApp();
                         objectApp.AppName = AppName;
                         objectApp.Version = Version;
-                        boolean createSuccessful = new TableControllerInstalledApps(InstalledList.this).create(objectApp);
+                        boolean createSuccessful = new TableControllerInstalledApps(UpdateReqList.this).create(objectApp);
                         if (createSuccessful) {
-                            Toast.makeText(InstalledList.this, "App information was saved.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UpdateReqList.this, "App information was saved.", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(InstalledList.this, "Unable to save App information.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(UpdateReqList.this, "Unable to save App information.", Toast.LENGTH_SHORT).show();
                         }
                         readRecords();
                     }
