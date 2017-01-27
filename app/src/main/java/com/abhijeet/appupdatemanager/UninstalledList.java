@@ -1,6 +1,8 @@
 package com.abhijeet.appupdatemanager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.LinearLayout;
@@ -30,6 +32,7 @@ public class UninstalledList extends AppCompatActivity {
             } else {
                 AppName = extras.getString("AppName");
                 Version = extras.getString("Version");
+
             }
         } else {
             AppName = (String) savedInstanceState.getSerializable("AppName");
@@ -102,13 +105,11 @@ public class UninstalledList extends AppCompatActivity {
         // ... your own onResume implementation
         checkForCrashes();
     }
-
     @Override
     public void onPause() {
         super.onPause();
         unregisterManagers();
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -117,12 +118,10 @@ public class UninstalledList extends AppCompatActivity {
     private void checkForCrashes() {
         CrashManager.register(this);
     }
-
     private void checkForUpdates() {
         // Remove this for store builds!
         UpdateManager.register(this);
     }
-
     private void unregisterManagers() {
         UpdateManager.unregister();
     }
