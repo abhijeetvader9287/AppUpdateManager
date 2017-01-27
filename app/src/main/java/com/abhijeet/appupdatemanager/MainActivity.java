@@ -9,16 +9,26 @@ import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 public class MainActivity extends AppCompatActivity {
     Button btnUpdateReqApps;
+    Button btnAddInstalledApps;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkForUpdates();
         btnUpdateReqApps = (Button) findViewById(R.id.btnUpdateReqApps);
+        btnAddInstalledApps = (Button) findViewById(R.id.btnAddInstalledApps);
         btnUpdateReqApps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, UpdateReqList.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            }
+        });
+        btnAddInstalledApps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, AddFromInstalledList.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
             }

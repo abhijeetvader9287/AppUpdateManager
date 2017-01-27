@@ -24,12 +24,12 @@ public class PeriodicTaskReceiver extends BroadcastReceiver {
             }
             if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
                 Intent i = new Intent(context.getApplicationContext(), UpdateReqList.class);
-                String pname = intent.getData().toString().replace("package:", "");
+               String pname = intent.getData().toString().replace("package:", "");
                 PackageInfo pInfo = null;
                 String version = "";
                 try {
                     pInfo = context.getPackageManager().getPackageInfo(pname, 0);
-                    version =Integer.toString( pInfo.versionCode);
+                    version = Integer.toString(pInfo.versionCode);
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -37,12 +37,6 @@ public class PeriodicTaskReceiver extends BroadcastReceiver {
                 i.putExtra("Version", version);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
-
-
-
-
-
-
              /*   Intent i = new Intent(context.getApplicationContext(), MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);*/
@@ -55,7 +49,7 @@ public class PeriodicTaskReceiver extends BroadcastReceiver {
                 String version = "";
                 try {
                     pInfo = context.getPackageManager().getPackageInfo(pname, 0);
-                    version =Integer.toString( pInfo.versionCode);
+                    version = Integer.toString(pInfo.versionCode);
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
