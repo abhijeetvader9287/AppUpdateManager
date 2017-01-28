@@ -1,70 +1,135 @@
 package com.abhijeet.appupdatemanager;
+import android.app.AlertDialog;
+import android.app.ListActivity;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import com.abhijeet.appupdatemanager.adapters.ApplicationAdapter;
+
+import java.util.ArrayList;
 import java.util.List;
-public class AddFromInstalledList extends AppCompatActivity {
+public class AddFromInstalledList extends ListActivity {
+    private PackageManager packageManager = null;
+    private List<ApplicationInfo> applist = null;
+    private ApplicationAdapter listadaptor = null;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_from_installed_list);
-        readRecords();
+        packageManager = getPackageManager();
+        new LoadApplications().execute();
     }
-    public void readRecords() {
-        LinearLayout linearLayoutRecords = (LinearLayout) findViewById(R.id.linearLayoutRecords);
-        if (linearLayoutRecords != null) {
-            linearLayoutRecords.removeAllViews();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean result = true;
+        switch (item.getItemId()) {
+            case R.id.menu_about: {
+                displayAboutDialog();
+                break;
+            }
+            default: {
+                result = super.onOptionsItemSelected(item);
+                break;
+            }
         }
-        PackageManager pm = getPackageManager();
-        List<PackageInfo> list = pm.getInstalledPackages(0);
-        for (PackageInfo pi : list) {
-            ApplicationInfo ai = null;
+        return result;
+    }
+    private void displayAboutDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.about_title));
+        builder.setMessage(getString(R.string.about_desc));
+        builder.setPositiveButton("Know More", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://javatechig.com"));
+                startActivity(browserIntent);
+                dialog.cancel();
+            }
+        });
+        builder.setNegativeButton("No Thanks!", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+       /* ApplicationInfo app = applist.get(position);
+        try {
+            Intent intent = packageManager
+                    .getLaunchIntentForPackage(app.packageName);
+            if (null != intent) {
+                startActivity(intent);
+            }
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(AddFromInstalledList.this, e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(AddFromInstalledList.this, e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        }*/
+    }
+    private List<ApplicationInfo> checkForLaunchIntent(List<ApplicationInfo> list) {
+        ArrayList<ApplicationInfo> applist = new ArrayList<ApplicationInfo>();
+        for (ApplicationInfo info : list) {
             try {
-                ai = pm.getApplicationInfo(pi.packageName, 0);
-            } catch (PackageManager.NameNotFoundException e) {
+                if (null != packageManager.getLaunchIntentForPackage(info.packageName)) {
+                    if ((info.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                        applist.add(info);
+                    }
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
-                String AppName = pi.packageName;
-                String Version = Integer.toString(pi.versionCode);
-                String textViewContents = AppName + " - " + Version;
-                TextView textViewStudentItem = new TextView(this);
-                textViewStudentItem.setPadding(0, 10, 0, 10);
-                textViewStudentItem.setText(textViewContents);
-                //* textViewStudentItem.setOnLongClickListener(new OnLongClickListenerStudentRecord());*//*
-                if (linearLayoutRecords != null) {
-                    linearLayoutRecords.addView(textViewStudentItem);
-                }
-            }
         }
-       /* List<ObjectApp> installedapp = new TableControllerInstalledApps(this).read();
-        if (installedapp.size() > 0) {
-            for (ObjectApp obj : installedapp) {
-                int id = obj.id;
-                String AppName = obj.AppName;
-                String Version = obj.Version;
-                String textViewContents = AppName + " - " + Version;
-                TextView textViewStudentItem = new TextView(this);
-                textViewStudentItem.setPadding(0, 10, 0, 10);
-                textViewStudentItem.setText(textViewContents);
-                textViewStudentItem.setTag(Integer.toString(id));
-               *//* textViewStudentItem.setOnLongClickListener(new OnLongClickListenerStudentRecord());*//*
-                if (linearLayoutRecords != null) {
-                    linearLayoutRecords.addView(textViewStudentItem);
-                }
-            }
-        } else {
-            TextView locationItem = new TextView(this);
-            locationItem.setPadding(8, 8, 8, 8);
-            locationItem.setText("No records yet.");
-            if (linearLayoutRecords != null) {
-                linearLayoutRecords.addView(locationItem);
-            }
-        }*/
+        return applist;
+    }
+    private class LoadApplications extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog progress = null;
+        @Override
+        protected Void doInBackground(Void... params) {
+            applist = checkForLaunchIntent(packageManager.getInstalledApplications(PackageManager.GET_META_DATA));
+            listadaptor = new ApplicationAdapter(AddFromInstalledList.this,
+                    R.layout.snippet_list_row, applist);
+            return null;
+        }
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            setListAdapter(listadaptor);
+            progress.dismiss();
+            super.onPostExecute(result);
+        }
+        @Override
+        protected void onPreExecute() {
+            progress = ProgressDialog.show(AddFromInstalledList.this, null,
+                    "Loading application info...");
+            super.onPreExecute();
+        }
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
     }
 }
