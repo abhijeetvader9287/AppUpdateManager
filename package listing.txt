@@ -21,3 +21,11 @@ http://stackoverflow.com/questions/38366063/android-issue-in-getting-a-list-of-a
 /*********************************************/
 http://theopentutorials.com/tutorials/android/listview/how-to-get-list-of-installed-apps-in-android/
 /*******************************************************/
+https://acadgild.com/blog/save-retrieve-image-sqlite-android/
+*********************************************************
+http://www.coderzheaven.com/2012/12/23/store-image-android-sqlite-retrieve-it/
+************************************************************************
+http://stackoverflow.com/questions/9357668/how-to-store-image-in-sqlite-database
+**********************************************
+https://www.youtube.com/watch?v=vLEWOsutK3s
+**************************************************
