@@ -1,38 +1,49 @@
 package com.abhijeet.appupdatemanager;
-import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abhijeet.appupdatemanager.adapters.ApplicationAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-public class AddFromInstalledList extends ListActivity {
+public class AddFromInstalledList extends AppCompatActivity {
     private PackageManager packageManager = null;
     private List<ApplicationInfo> applist = null;
     private ApplicationAdapter listadaptor = null;
+    ListView list;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_from_installed_list);
+        list = (ListView) findViewById(R.id.list);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        TextView mTitle = (TextView) toolbar.findViewById(R.id.apptitle);
+        mTitle.setText("Save To App List");
+        Button saveBtn = (Button) toolbar.findViewById(R.id.savebutton);
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(AddFromInstalledList.this, "Save Btn Clicked", Toast.LENGTH_LONG).show();
+            }
+        });
+        toolbar.setContentInsetsAbsolute(0, 0);
+        toolbar.getContentInsetEnd();
+        toolbar.setPadding(0, 0, 0, 0);
+        setSupportActionBar(toolbar);
         packageManager = getPackageManager();
         new LoadApplications().execute();
     }
-    public boolean onCreateOptionsMenu(Menu menu) {
+  /*  public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;
@@ -68,25 +79,7 @@ public class AddFromInstalledList extends ListActivity {
             }
         });
         builder.show();
-    }
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-       /* ApplicationInfo app = applist.get(position);
-        try {
-            Intent intent = packageManager
-                    .getLaunchIntentForPackage(app.packageName);
-            if (null != intent) {
-                startActivity(intent);
-            }
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(AddFromInstalledList.this, e.getMessage(),
-                    Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            Toast.makeText(AddFromInstalledList.this, e.getMessage(),
-                    Toast.LENGTH_LONG).show();
-        }*/
-    }
+    }*/
     private List<ApplicationInfo> checkForLaunchIntent(List<ApplicationInfo> list) {
         ArrayList<ApplicationInfo> applist = new ArrayList<ApplicationInfo>();
         for (ApplicationInfo info : list) {
@@ -117,7 +110,7 @@ public class AddFromInstalledList extends ListActivity {
         }
         @Override
         protected void onPostExecute(Void result) {
-            setListAdapter(listadaptor);
+            list.setAdapter(listadaptor);
             progress.dismiss();
             super.onPostExecute(result);
         }

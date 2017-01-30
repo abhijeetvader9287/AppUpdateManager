@@ -44,7 +44,9 @@
             android:name="net.hockeyapp.android.appIdentifier"
             android:value="e89e250fa32e4f228ac72ecb4855406d"/>
 
-        <activity android:name=".AddFromInstalledList">
+        <activity android:name=".AddFromInstalledList"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme">
         </activity>
     </application>
 
