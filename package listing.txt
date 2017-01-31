@@ -31,3 +31,4 @@ https://www.youtube.com/watch?v=vLEWOsutK3s
 **************************************************
 https://sites.google.com/site/barsham/list-of-topics-1/programming/eclipse-android-windows-64
 **********************************************************
+http://theopentutorials.com/tutorials/android/installing-android-sdk-and-eclipse-adt-plugin/
