@@ -8,10 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.abhijeet.appupdatemanager.DbWork.ObjectApp;
+import com.abhijeet.appupdatemanager.DbWork.TableControllerInstalledApps;
 import com.abhijeet.appupdatemanager.adapters.ApplicationAdapter;
 
 import java.util.ArrayList;
@@ -33,7 +36,23 @@ public class AddFromInstalledList extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                CheckBox cb;
+                for (int x = 0; x < list.getChildCount(); x++) {
+                    cb = (CheckBox) list.getChildAt(x).findViewById(R.id.checkbox_add);
+                    if (cb.isChecked()) {
+                        ObjectApp objectApp = new ObjectApp();
+                        objectApp.AppName = applist.get(x).packageName;
+                        objectApp.Version = "To be coded";
+                        boolean createSuccessful = new TableControllerInstalledApps(AddFromInstalledList.this).create(objectApp);
+                        if (createSuccessful) {
+                            Toast.makeText(AddFromInstalledList.this, "App information was saved.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(AddFromInstalledList.this, "Unable to save App information.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
                 Toast.makeText(AddFromInstalledList.this, "Save Btn Clicked", Toast.LENGTH_LONG).show();
+                finish();
             }
         });
         toolbar.setContentInsetsAbsolute(0, 0);
@@ -43,43 +62,6 @@ public class AddFromInstalledList extends AppCompatActivity {
         packageManager = getPackageManager();
         new LoadApplications().execute();
     }
-  /*  public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-    public boolean onOptionsItemSelected(MenuItem item) {
-        boolean result = true;
-        switch (item.getItemId()) {
-            case R.id.menu_about: {
-                displayAboutDialog();
-                break;
-            }
-            default: {
-                result = super.onOptionsItemSelected(item);
-                break;
-            }
-        }
-        return result;
-    }
-    private void displayAboutDialog() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.about_title));
-        builder.setMessage(getString(R.string.about_desc));
-        builder.setPositiveButton("Know More", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://javatechig.com"));
-                startActivity(browserIntent);
-                dialog.cancel();
-            }
-        });
-        builder.setNegativeButton("No Thanks!", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
-    }*/
     private List<ApplicationInfo> checkForLaunchIntent(List<ApplicationInfo> list) {
         ArrayList<ApplicationInfo> applist = new ArrayList<ApplicationInfo>();
         for (ApplicationInfo info : list) {
