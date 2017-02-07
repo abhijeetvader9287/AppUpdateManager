@@ -6,7 +6,6 @@
               android:orientation="horizontal">
     <LinearLayout android:layout_height="50dp" android:layout_width="0dp" android:layout_weight="15">
         <ImageView
-            android:layout_alignParentLeft="true"
             android:id="@+id/app_icon"
             android:layout_width="50dp"
             android:layout_height="50dp"

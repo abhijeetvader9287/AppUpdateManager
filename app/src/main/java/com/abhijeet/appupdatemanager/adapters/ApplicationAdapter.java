@@ -57,4 +57,4 @@ public class ApplicationAdapter extends ArrayAdapter<ApplicationInfo> {
         }
         return view;
     }
-};
+}

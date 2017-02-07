@@ -67,7 +67,7 @@ public class UpdateReqList extends AppCompatActivity {
             alertDialog.show();
         }
     }
-    public void readRecords() {
+    private void readRecords() {
         LinearLayout linearLayoutRecords = (LinearLayout) findViewById(R.id.linearLayoutRecords);
         if (linearLayoutRecords != null) {
             linearLayoutRecords.removeAllViews();

@@ -1,6 +1,4 @@
 package com.abhijeet.appupdatemanager;
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -11,7 +9,7 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.*;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static org.junit.Assert.*;
+
 /**
  * Instrumentation test, which will execute on an Android device.
  *

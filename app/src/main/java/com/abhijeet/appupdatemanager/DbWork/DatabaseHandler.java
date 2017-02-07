@@ -4,12 +4,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by Admin on 1/25/2017.
- */public class DatabaseHandler extends SQLiteOpenHelper {
+ */
+class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-    protected static final String DATABASE_NAME = "StudentDatabase";
+    private static final String DATABASE_NAME = "StudentDatabase";
 
-    public DatabaseHandler(Context context) {
+    DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

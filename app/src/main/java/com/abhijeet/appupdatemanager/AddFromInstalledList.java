@@ -1,6 +1,8 @@
 package com.abhijeet.appupdatemanager;
+
 import android.app.ProgressDialog;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +13,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.abhijeet.appupdatemanager.DbWork.ObjectApp;
 import com.abhijeet.appupdatemanager.DbWork.TableControllerInstalledApps;
@@ -19,11 +20,13 @@ import com.abhijeet.appupdatemanager.adapters.ApplicationAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
 public class AddFromInstalledList extends AppCompatActivity {
     private PackageManager packageManager = null;
     private List<ApplicationInfo> applist = null;
     private ApplicationAdapter listadaptor = null;
-    ListView list;
+    private ListView list;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,16 +45,22 @@ public class AddFromInstalledList extends AppCompatActivity {
                     if (cb.isChecked()) {
                         ObjectApp objectApp = new ObjectApp();
                         objectApp.AppName = applist.get(x).packageName;
-                        objectApp.Version = "To be coded";
+                        PackageInfo pInfo = null;
+                        try {
+                            pInfo = getPackageManager().getPackageInfo(objectApp.AppName, 0);
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        objectApp.Version = Integer.toString(pInfo.versionCode);
                         boolean createSuccessful = new TableControllerInstalledApps(AddFromInstalledList.this).create(objectApp);
                         if (createSuccessful) {
-                            Toast.makeText(AddFromInstalledList.this, "App information was saved.", Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(AddFromInstalledList.this, "App information was saved.", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(AddFromInstalledList.this, "Unable to save App information.", Toast.LENGTH_SHORT).show();
+                            //  Toast.makeText(AddFromInstalledList.this, "Unable to save App information.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
-                Toast.makeText(AddFromInstalledList.this, "Save Btn Clicked", Toast.LENGTH_LONG).show();
+                /// Toast.makeText(AddFromInstalledList.this, "Save Btn Clicked", Toast.LENGTH_LONG).show();
                 finish();
             }
         });
@@ -62,6 +71,7 @@ public class AddFromInstalledList extends AppCompatActivity {
         packageManager = getPackageManager();
         new LoadApplications().execute();
     }
+
     private List<ApplicationInfo> checkForLaunchIntent(List<ApplicationInfo> list) {
         ArrayList<ApplicationInfo> applist = new ArrayList<ApplicationInfo>();
         for (ApplicationInfo info : list) {
@@ -77,8 +87,10 @@ public class AddFromInstalledList extends AppCompatActivity {
         }
         return applist;
     }
+
     private class LoadApplications extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progress = null;
+
         @Override
         protected Void doInBackground(Void... params) {
             applist = checkForLaunchIntent(packageManager.getInstalledApplications(PackageManager.GET_META_DATA));
@@ -86,22 +98,26 @@ public class AddFromInstalledList extends AppCompatActivity {
                     R.layout.snippet_list_row, applist);
             return null;
         }
+
         @Override
         protected void onCancelled() {
             super.onCancelled();
         }
+
         @Override
         protected void onPostExecute(Void result) {
             list.setAdapter(listadaptor);
             progress.dismiss();
             super.onPostExecute(result);
         }
+
         @Override
         protected void onPreExecute() {
             progress = ProgressDialog.show(AddFromInstalledList.this, null,
                     "Loading application info...");
             super.onPreExecute();
         }
+
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
