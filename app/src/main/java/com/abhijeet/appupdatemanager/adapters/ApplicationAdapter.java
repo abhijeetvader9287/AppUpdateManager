@@ -2,6 +2,7 @@ package com.abhijeet.appupdatemanager.adapters;
 /**
  * Created by Admin on 1/28/2017.
  */
+
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -15,10 +16,12 @@ import android.widget.TextView;
 import com.abhijeet.appupdatemanager.R;
 
 import java.util.List;
+
 public class ApplicationAdapter extends ArrayAdapter<ApplicationInfo> {
     private List<ApplicationInfo> appsList = null;
     private Context context;
     private PackageManager packageManager;
+
     public ApplicationAdapter(Context context, int textViewResourceId,
                               List<ApplicationInfo> appsList) {
         super(context, textViewResourceId, appsList);
@@ -26,18 +29,22 @@ public class ApplicationAdapter extends ArrayAdapter<ApplicationInfo> {
         this.appsList = appsList;
         packageManager = context.getPackageManager();
     }
+
     @Override
     public int getCount() {
         return ((null != appsList) ? appsList.size() : 0);
     }
+
     @Override
     public ApplicationInfo getItem(int position) {
         return ((null != appsList) ? appsList.get(position) : null);
     }
+
     @Override
     public long getItemId(int position) {
         return position;
     }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
