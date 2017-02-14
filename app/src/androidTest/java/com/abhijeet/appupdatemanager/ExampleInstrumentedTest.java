@@ -38,18 +38,6 @@ public class ExampleInstrumentedTest {
 
 
         onView(withId(R.id.btnAddInstalledApps)).perform(click());
-
-
-
-
-
-
-
-
-
-
-
-
         onView(withId(R.id.savebutton)).perform(click());
 
     }
