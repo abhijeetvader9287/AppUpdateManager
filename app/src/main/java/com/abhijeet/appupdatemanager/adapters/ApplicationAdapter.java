@@ -59,7 +59,11 @@ public class ApplicationAdapter extends ArrayAdapter<ApplicationInfo> {
             TextView packageName = (TextView) view.findViewById(R.id.app_paackage);
             ImageView iconview = (ImageView) view.findViewById(R.id.app_icon);
             appName.setText(applicationInfo.loadLabel(packageManager));
-            packageName.setText(applicationInfo.packageName);
+            try {
+                packageName.setText(applicationInfo.packageName+(packageManager.getPackageInfo(applicationInfo.packageName,0).versionName));
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
             iconview.setImageDrawable(applicationInfo.loadIcon(packageManager));
         }
         return view;
