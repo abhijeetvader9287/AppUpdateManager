@@ -1,20 +1,32 @@
 package com.abhijeet.appupdatemanager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abhijeet.appupdatemanager.DbWork.ObjectApp;
 import com.abhijeet.appupdatemanager.DbWork.TableControllerInstalledApps;
+import com.abhijeet.appupdatemanager.adapters.UpdateReqListAdapter;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
+import org.jsoup.Jsoup;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 public class UpdateReqList extends AppCompatActivity {
+    private List<PackageInfo> applist = null;
+    private UpdateReqListAdapter listadaptor = null;
+    private ListView list;
+    String newVersion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +42,6 @@ public class UpdateReqList extends AppCompatActivity {
             } else {
                 AppName = extras.getString("AppName");
                 Version = extras.getString("Version");
-
             }
         } else {
             AppName = (String) savedInstanceState.getSerializable("AppName");
@@ -68,33 +79,66 @@ public class UpdateReqList extends AppCompatActivity {
         }
     }
     private void readRecords() {
-        LinearLayout linearLayoutRecords = (LinearLayout) findViewById(R.id.linearLayoutRecords);
-        if (linearLayoutRecords != null) {
-            linearLayoutRecords.removeAllViews();
-        }
+        list = (ListView) findViewById(R.id.linearLayoutRecords);
         List<ObjectApp> installedapp = new TableControllerInstalledApps(this).read();
         if (installedapp.size() > 0) {
-            for (ObjectApp obj : installedapp) {
-                int id = obj.id;
-                String AppName = obj.AppName;
-                String Version = obj.Version;
-                String textViewContents = AppName + " - " + Version;
-                TextView textViewStudentItem = new TextView(this);
-                textViewStudentItem.setPadding(0, 10, 0, 10);
-                textViewStudentItem.setText(textViewContents);
-                textViewStudentItem.setTag(Integer.toString(id));
+            applist = new ArrayList<PackageInfo>();
+            newVersion="";
+            for (final ObjectApp obj : installedapp) {
+                try {
+                    final TextView textViewStudentItem = new TextView(UpdateReqList.this);
+                    final PackageInfo packageInfo = new PackageInfo();
+                    AsyncTask asyncTask = new AsyncTask() {
+                        @Override
+                        protected Object doInBackground(Object[] params) {
+                            try {
+                                newVersion="";
+                                newVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + obj.AppName + "&hl=en")
+                                        .timeout(30000)
+                                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                                        .referrer("http://www.google.com")
+                                        .get()
+                                        .select("div[itemprop=softwareVersion]")
+                                        .first()
+                                        .ownText();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            try {
+                                int id = obj.id;
+                                String AppName = obj.AppName;
+                                String Version = obj.Version;
+                                String textViewContents = Version + "*" + newVersion;
+                                textViewStudentItem.setPadding(0, 10, 0, 10);
+                                textViewStudentItem.setText(textViewContents);
+                                textViewStudentItem.setTag(Integer.toString(id));
+                                packageInfo.packageName = obj.AppName;
+                                packageInfo.versionName = textViewContents;
+                                applist.add(packageInfo);
+                                listadaptor = new UpdateReqListAdapter(UpdateReqList.this,
+                                        R.layout.snippet_list_row, applist);
+                                list.setAdapter(listadaptor);
+                            } catch (Exception ex) {
+                            }
+
                /* textViewStudentItem.setOnLongClickListener(new OnLongClickListenerStudentRecord());*/
-                if (linearLayoutRecords != null) {
-                    linearLayoutRecords.addView(textViewStudentItem);
+                        }
+                    };
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
+                        asyncTask.execute();
+                    }
+                } catch (Exception ex) {
                 }
             }
+
         } else {
             TextView locationItem = new TextView(this);
             locationItem.setPadding(8, 8, 8, 8);
             locationItem.setText("No records yet.");
-            if (linearLayoutRecords != null) {
-                linearLayoutRecords.addView(locationItem);
-            }
         }
     }
     @Override

@@ -51,7 +51,7 @@ public class AddFromInstalledList extends AppCompatActivity {
                         } catch (PackageManager.NameNotFoundException e) {
                             e.printStackTrace();
                         }
-                        objectApp.Version = Integer.toString(pInfo.versionCode);
+                        objectApp.Version = pInfo.versionName;
                         boolean createSuccessful = new TableControllerInstalledApps(AddFromInstalledList.this).create(objectApp);
                         if (createSuccessful) {
                             // Toast.makeText(AddFromInstalledList.this, "App information was saved.", Toast.LENGTH_SHORT).show();
