@@ -101,7 +101,7 @@ public class UpdateReqList extends AppCompatActivity {
                                         .select("div[itemprop=softwareVersion]")
                                         .first()
                                         .ownText();
-                            } catch (IOException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             return null;
